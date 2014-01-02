@@ -1,4 +1,7 @@
-<?php echo $this->Html->script(array('Documents.tiny_mce/tiny_mce', 'Documents.documents_admin')); ?>
+<?php
+//echo $this->Html->script(array('Documents.tiny_mce/tiny_mce'));
+echo $this->Html->script(array( 'Documents.documents_admin'));
+?>
 
 <?php if (!empty($error)): ?>
 	<script type="text/javascript">
@@ -45,6 +48,9 @@
 <script type="text/javascript">	
 	var baseurl = '<?php echo $this->Html->url('/'); ?>';
 	documents_init();	
-
+	var resources_tiny = "<?php echo str_replace('/', '\/', $this->Html->url(array('controller' => 'resources', 'action' => 'tiny_upload', 'admin' => true))); ?>";
 </script>
+
+<?php echo $this->Js->writeBuffer(); ?>
+
 

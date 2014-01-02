@@ -1,4 +1,4 @@
-<?php echo $this->Html->script(array('Documents.tiny_mce/tiny_mce', 'Documents.documents_admin')); ?>
+<?php echo $this->Html->script(array( 'Documents.documents_admin')); ?>
 
 <div class="documents form">
 	<?php echo $this->Form->create('Document'); ?>

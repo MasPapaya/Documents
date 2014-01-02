@@ -14,9 +14,12 @@ function documents_init() {
 
 			});
 		},
-		plugins:"jbimages",
-		relative_urls : false,
-		theme_advanced_buttons4 : "jbimages"
+			theme_advanced_buttons1 : "bold,italic,underline,strikethrough,justifyleft,justifycenter,justifyright,justifyfull",
+			theme_advanced_buttons2 : "bullist,numlist,separator,outdent,indent,separator,undo,redo,separator,link,unlink",
+			theme_advanced_buttons3 : ""
+	//		plugins:"jbimages",
+	//		relative_urls : false,
+	//		theme_advanced_buttons4 : "jbimages"
 	});
 	
 	

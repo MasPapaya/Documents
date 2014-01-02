@@ -20,9 +20,18 @@ class DocumentsController extends DocumentsAppController {
 	 */
 	public function admin_index($document_type_id = null, $parent_entityid = null) {
 
-		if (is_null($parent_entityid) && !is_numeric($parent_entityid)) {
-			throw new MethodNotAllowedException();
-			return false;
+		if (is_null($parent_entityid)) {
+			if (!empty($this->authuser['id'])) {
+				$parent_entityid = $this->authuser['id'];
+			} else {
+				throw new MethodNotAllowedException();
+				return false;
+			}
+		} else {
+			if (!is_numeric($parent_entityid)) {
+				throw new MethodNotAllowedException();
+				return false;
+			}
 		}
 		$this->loadModel('DocumentType');
 		$this->DocumentType->recursive = 0;
@@ -131,7 +140,7 @@ class DocumentsController extends DocumentsAppController {
 				'conditions' => array('Document.document_type_id' => $document_type_id, 'Document.parent_entityid' => $parent_entityid),
 				'Document.deleted ' => Configure::read('zero_datetime'),
 				));
-			$conditions_language=array();
+			$conditions_language = array();
 			foreach ($list_document as $document) {
 				$conditions_language[] = 'Language.id != ' . $document;
 			}
@@ -183,52 +192,52 @@ class DocumentsController extends DocumentsAppController {
 	 * @return void
 	 */
 	public function admin_edit($id = null, $document_type_id = null, $parent_entityid = null) {
-		if ($this->request->is('ajax')) {
+//		if ($this->request->is('ajax')) {
 
-			$this->Document->id = $id;
-			if (!$this->Document->exists()) {
-				throw new NotFoundException(__('Invalid document'));
-			}
-
-			$document = $this->Document->read(null, $id);
-			if ($this->authuser['Group']['name'] != 'superadmin') {
-				if ($document['DocumentType']['use_user_id'] === TRUE) {
-					if ($document['Document']['user_id'] != $this->authuser['id']) {
-						$this->Session->setFlash(__('Upss'), 'flash/success');
-						//$this->redirect(array('plugin' => 'accounts', 'controller' => 'Users', 'action' => 'welcome', 'admin' => false), null, true);
-						$this->set('error', 'intruder');
-					}
-				}
-			}
-
-			if ($this->request->is('post') || $this->request->is('put')) {
-				if ($this->Document->save($this->request->data)) {
-					$this->Session->setFlash(__('The document has been saved'), 'flash/success');
-					$this->redirect(array('action' => 'index', $document_type_id, $parent_entityid));
-				} else {
-					$this->Session->setFlash(__('The document could not be saved. Please, try again.'), 'flash/error');
-				}
-			} else {
-				$this->request->data = $document;
-			}
-
-			$languages = $this->Document->Language->find('list');
-
-			if ($this->authuser['Group']['name'] == 'superadmin') {
-				$this->loadModel('User');
-				$this->set('users', $this->User->find('list', array(
-						'fields' => array('User.username', 'User.username'),
-						'recursive' => 0,
-						'conditions' => array('User.deleted' => '0000-00-00 00:00:00', 'User.activated !=' => '0000-00-00 00:00:00', 'User.banned' => '0000-00-00 00:00:00')
-					)));
-			}
-
-			$this->set(compact('document'));
-			$this->set(compact('document_type_id', 'parent_entity_id', 'id', 'languages'));
-//			$this->set(compact('documentTypes'));
-		} else {
-			throw new NotFoundException(__('Expected ajax request'));
+		$this->Document->id = $id;
+		if (!$this->Document->exists()) {
+			throw new NotFoundException(__('Invalid document'));
 		}
+
+		$document = $this->Document->read(null, $id);
+		if ($this->authuser['Group']['name'] != 'superadmin') {
+			if ($document['DocumentType']['use_user_id'] === TRUE) {
+				if ($document['Document']['user_id'] != $this->authuser['id']) {
+					$this->Session->setFlash(__('Upss'), 'flash/success');
+					//$this->redirect(array('plugin' => 'accounts', 'controller' => 'Users', 'action' => 'welcome', 'admin' => false), null, true);
+					$this->set('error', 'intruder');
+				}
+			}
+		}
+
+		if ($this->request->is('post') || $this->request->is('put')) {
+			if ($this->Document->save($this->request->data)) {
+				$this->Session->setFlash(__('The document has been saved'), 'flash/success');
+				$this->redirect(array('action' => 'index', $document_type_id, $parent_entityid));
+			} else {
+				$this->Session->setFlash(__('The document could not be saved. Please, try again.'), 'flash/error');
+			}
+		} else {
+			$this->request->data = $document;
+		}
+
+		$languages = $this->Document->Language->find('list');
+
+		if ($this->authuser['Group']['name'] == 'superadmin') {
+			$this->loadModel('User');
+			$this->set('users', $this->User->find('list', array(
+					'fields' => array('User.username', 'User.username'),
+					'recursive' => 0,
+					'conditions' => array('User.deleted' => '0000-00-00 00:00:00', 'User.activated !=' => '0000-00-00 00:00:00', 'User.banned' => '0000-00-00 00:00:00')
+				)));
+		}
+
+		$this->set(compact('document'));
+		$this->set(compact('document_type_id', 'parent_entity_id', 'id', 'languages'));
+//			$this->set(compact('documentTypes'));
+//		} else {
+//			throw new NotFoundException(__('Expected ajax request'));
+//		}
 	}
 
 	public function admin_empty() {

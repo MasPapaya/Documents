@@ -5,7 +5,7 @@
 		<?php endif; ?>
 	</div>
 	<div id="info_documents">
-		<h2><?php echo __('Documents'); ?> - <?php echo $documentType['DocumentType']['name']; ?></h2>
+		<h2><?php echo __('Documents'); ?> - <?php echo __($documentType['DocumentType']['name']); ?></h2>
 
 		<table class="table table-striped table-bordered table-condensed">
 			<tr>
@@ -68,7 +68,7 @@
 		<?php
 		if (CakePlugin::loaded('Resources')) {
 
-			echo $this->Frame->modal('frame', 'documents');
+			echo $this->Frame->modal('frame', array('title' => __('Documents')));
 		}
 		?>
 		<div class="pagination pagination-centered">
@@ -77,7 +77,6 @@
 			'update' => "#" . $documentType['DocumentType']['alias'],
 			'evalScripts' => true,
 		));
-		echo $this->Paginator->counter(array('format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')));
 		?></p>
 			<ul><?php
 				echo $this->Paginator->prev('«', array('tag' => 'li'), null, array('class' => 'prev disabled ', 'tag' => 'li', 'disabledTag' => 'a'));

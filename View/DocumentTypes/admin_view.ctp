@@ -1,13 +1,7 @@
-<div class="span3">
-	<div class="well">
-		<ul class="nav nav-list">
-			<li class="nav-header"><?php echo __('Actions'); ?></li>
-			<li><?php echo $this->Html->link('<i class="icon-list"></i>&nbsp;'.__('List Document Types'),array('action'=>'index'), array('escape' => FALSE));?></li>
-		</ul>
+<div class="cru">
+	<div class="btn-options">
+		<?php echo $this->Html->link('<i class="icon-list icon-white"></i>&nbsp;' . __('Back to List'), array('action' => 'index', 'admin' => true), array('class' => 'btn btn-primary', 'escape' => FALSE)); ?>	
 	</div>
-</div>
-
-<div class="span8">
 	<h2><?php echo __('Document Type'); ?></h2>
 	<dl>
 		<dt><?php echo __('Id'); ?></dt>
@@ -35,9 +29,9 @@
 			<?php echo h($documentType['DocumentType']['is_multiple']); ?>
 			&nbsp;
 		</dd>
-		<dt><?php echo __('Use User');?></dt>
+		<dt><?php echo __('Use User'); ?></dt>
 		<dd>
-			<?php echo h($documentType['DocumentType']['use_user_id']);?>
+			<?php echo h($documentType['DocumentType']['use_user_id']); ?>
 			&nbsp;
 		</dd>
 	</dl>

@@ -1,9 +1,9 @@
-<div class="span12">
-	<div>
-		<ul class="nav nav-list">
-			<li><?php echo $this->Ajs->link('<i class="icon-list"></i>&nbsp;' . __('List Documents'), array('action' => 'admin_index', $document['DocumentType']['id'], $document['Document']['parent_entityid']), '', "#".$document['DocumentType']['alias']); ?></li>
-		</ul>
+<div class="cru">
+	<div class="btn-options">
+		<?php echo $this->Ajs->link('<i class="icon-list icon-white"></i>&nbsp;' . __('Back to List'), array('action' => 'admin_index', $document['DocumentType']['id'], $document['Document']['parent_entityid']), 'btn btn-primary', "#" . $document['DocumentType']['alias']); ?>
+
 	</div>
+
 	<div class="documents view">
 		<h2><?php echo __('Document'); ?></h2>
 		<dl>

@@ -59,7 +59,22 @@ class DocumentsController extends DocumentsAppController {
 			'Document.deleted' => Configure::read('zero_datetime'),
 			'Document.document_type_id' => $document_type_id
 		);
-		if ($this->authuser['Group']['name'] != 'superadmin') {
+
+		$is_admin = false;
+		switch ($this->authuser['Group']['name']) {
+			case 'superadmin':
+				$is_admin = true;
+				break;
+			case 'admin':
+				$is_admin = true;
+				break;
+
+			default:
+				$is_admin = false;
+				break;
+		}
+
+		if (!$is_admin) {
 			$conditions['Document.parent_entityid'] = $parent_entityid;
 			if ($documentType['DocumentType']['use_user_id'] === TRUE) {
 				$conditions['Document.user_id'] = $this->authuser['id'];

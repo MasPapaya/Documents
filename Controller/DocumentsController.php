@@ -41,19 +41,21 @@ class DocumentsController extends DocumentsAppController {
 		if (!$documentType['DocumentType']['is_multiple']) {
 			$this->Language->recursive = 0;
 			$count_language = $this->Language->find('count');
-
-			$count_documents = $this->Document->find('count', array(
+			$conditions_settings = array(
 				'conditions' => array(
 					'Document.document_type_id' => $document_type_id,
 					'Document.parent_entityid' => $parent_entityid,
 					'Document.deleted' => Configure::read('zero_datetime'),
-				)));
+				));
+			if ($documentType['DocumentType']['use_user_id']) {
+				$conditions_settings['conditions']['Document.user_id'] = $parent_entityid;
+			}
 
+			$count_documents = $this->Document->find('count', $conditions_settings);
 			if ($count_language == $count_documents) {
 				$this->set('disable_button', true);
 			}
 		}
-
 
 		$conditions = array(
 			'Document.deleted' => Configure::read('zero_datetime'),
@@ -149,21 +151,26 @@ class DocumentsController extends DocumentsAppController {
 		$documentType = $this->DocumentType->read(NULL, $document_type_id);
 		if (!empty($documentType)) {
 			$this->loadModel('Language');
-			$list_document = $this->Document->find('list', array(
-				'fields' => array('Document.language_id'),
-				'group' => array('Document.language_id'),
-				'conditions' => array('Document.document_type_id' => $document_type_id, 'Document.parent_entityid' => $parent_entityid),
-				'Document.deleted ' => Configure::read('zero_datetime'),
-				));
 			$conditions_language = array();
-			foreach ($list_document as $document) {
-				$conditions_language[] = 'Language.id != ' . $document;
-			}
+			if (!$documentType['DocumentType']['is_multiple']) {
+				$conditions_list = array('Document.document_type_id' => $document_type_id, 'Document.parent_entityid' => $parent_entityid, 'Document.deleted ' => Configure::read('zero_datetime'));
+				if ($documentType['DocumentType']['use_user_id']) {
+					$conditions_list['Document.user_id'] = $this->authuser['id'];
+				}
+				$list_document = $this->Document->find('list', array(
+					'fields' => array('Document.id', 'Document.language_id'),
+					'group' => array('Document.language_id'),
+					'conditions' => $conditions_list
+					));
 
+				foreach ($list_document as $document) {
+					$conditions_language[] = 'Language.id != ' . $document;
+				}
+			}
 			$languages = $this->Language->find('list', array(
 				'conditions' => $conditions_language
 				));
-			if (!empty($this->request->data)) {
+			if ($this->request->is('post') || $this->request->is('put')) {
 				if ($documentType['DocumentType']['use_user_id'] === TRUE) {
 					$this->request->data['Document']['user_id'] = $this->authuser['id'];
 				}

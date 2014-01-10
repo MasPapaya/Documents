@@ -11,6 +11,7 @@ class DocumentsController extends DocumentsAppController {
 
 	public function beforeFilter() {
 		parent::beforeFilter();
+		$this->loadModel('Documents.Document');
 	}
 
 	/**
@@ -92,7 +93,10 @@ class DocumentsController extends DocumentsAppController {
 			$this->helpers[] = 'Resources.Frame';
 		}
 
-		$this->Document->recursive = 1;
+		$this->Document->recursive = 2;
+		$this->DocumentType->bindModel(array(
+			'belongsTo' => array('Entity')
+		));
 		$this->set('documents', $this->paginate());
 
 		$this->set(compact('document_type_id', 'parent_entityid'));
@@ -162,6 +166,8 @@ class DocumentsController extends DocumentsAppController {
 					'group' => array('Document.language_id'),
 					'conditions' => $conditions_list
 					));
+
+
 
 				foreach ($list_document as $document) {
 					$conditions_language[] = 'Language.id != ' . $document;

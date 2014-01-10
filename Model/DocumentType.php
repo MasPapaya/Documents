@@ -82,7 +82,7 @@ class DocumentType extends DocumentsAppModel {
 	 */
 	public $belongsTo = array(
 		'Entity' => array(
-			'className' => 'Entity',
+			'className' => 'Configurations.Entity',
 			'foreignKey' => 'entity_id',
 			'conditions' => '',
 			'fields' => '',

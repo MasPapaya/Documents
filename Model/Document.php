@@ -9,7 +9,7 @@ App::uses('AppModel', 'Model');
  * @property Entity $Entity
  * @property Fragment $Fragment
  */
-class Document extends  DocumentsAppModel {
+class Document extends DocumentsAppModel {
 
 	/**
 	 * Display field
@@ -84,10 +84,10 @@ class Document extends  DocumentsAppModel {
 			'is_single' => array(
 				'rule' => array('is_single'),
 				'message' => 'Document exist',
-			//'allowEmpty' => false,
-			//'required' => false,
-			//'last' => false, // Stop validation after this rule
-			'on' => 'create', // Limit validation to 'create' or 'update' operations
+				//'allowEmpty' => false,
+				//'required' => false,
+				//'last' => false, // Stop validation after this rule
+				'on' => 'create', // Limit validation to 'create' or 'update' operations
 			),
 		),
 	);
@@ -141,16 +141,21 @@ class Document extends  DocumentsAppModel {
 		$is_multiple = $this->DocumentType->find('first', array(
 			'conditions' => array('DocumentType.id' => $this->data['Document']['document_type_id']),
 			));
-		if ($is_multiple['DocumentType']['is_multiple'] == false) {
+		if ($is_multiple['DocumentType']['is_multiple'] == false) {			
 
+			$conditions = array(
+				'parent_entityid' => $this->data['Document']['parent_entityid'],
+				'document_type_id' => $this->data['Document']['document_type_id'],
+				'deleted' => Configure::read('zero_datetime'),
+				'language_id' => $this->data['Document']['language_id'],
+			);
+			if ($is_multiple['DocumentType']['use_user_id']) {
+				$conditions['Document.user_id'] = $this->data['Document']['parent_entityid'];
+			}
 			$exist_document = $this->find('count', array(
-				'conditions' => array(
-					'parent_entityid' => $this->data['Document']['parent_entityid'],
-					'document_type_id' => $this->data['Document']['document_type_id'],
-					'deleted' => Configure::read('zero_datetime'),
-					'language_id' => $this->data['Document']['language_id'],
-				),
+				'conditions' => $conditions
 				));
+			
 			if ($exist_document > 0) {
 				return false;
 			} else {

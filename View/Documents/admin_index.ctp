@@ -51,8 +51,8 @@
 							<?php echo $this->Ajs->button('icon-eye-open', array('action' => 'admin_view', $document['Document']['id'], $document_type_id, $parent_entityid), '', "#" . $documentType['DocumentType']['alias']) ?>
 
 							<?php
-							if (CakePlugin::loaded('Resources')) {
-								echo $this->Frame->link('icon-film', 'frame', 'cms', $document['Document']['id']);
+							if (Configure::read('is_resources')) {
+								echo $this->Frame->link('icon-film', 'frame', $document['DocumentType']['Entity']['alias'], $document['Document']['id']);
 							}
 							?>
 							<?php

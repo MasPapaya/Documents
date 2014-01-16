@@ -1,12 +1,15 @@
-<?php echo $this->Html->script(array( 'Documents.documents_admin')); ?>
+<?php echo $this->Html->css(array('Documents.chosen')); ?>
+<?php echo $this->Html->script(array('Documents.chosen.jquery')); ?>
+<?php echo $this->Html->script(array('Documents.documents_admin')); ?>
+
 
 <div class="documents form">
 	<?php echo $this->Form->create('Document'); ?>
-    <fieldset>
+	<fieldset>
 		<legend><?php echo __('Add Document'); ?></legend>
 		<?php
 		if (!empty($users)) {
-			echo $this->Form->input('user', array('options' => $users, 'class' => 'select_chosen', 'required' => 'required', 'autocomplete' => 'off'));
+			echo $this->Form->input('user_id', array('type'=>'text', 'data-provide' => 'typeahead', 'placeholder' => 'search user','required' => 'required', 'autocomplete' => 'off','class'=>'input_autcomplet'));
 		}
 		echo $this->Form->input('document_type_id', array('type' => 'hidden', 'value' => $parent_entityid));
 		echo $this->Form->input('parent_entityid', array('type' => 'hidden', 'value' => $parent_entityid));
@@ -28,6 +31,11 @@
 	<?php echo $this->Form->end(); ?>
 </div>
 <script type="text/javascript">	
+	$(".select_chosen").chosen({
+		max_selected_options: 2,
+		no_results_text: "No se encontro"
+
+	});
 	var baseurl = '<?php echo $this->Html->url('/'); ?>';
 	documents_init();	
 

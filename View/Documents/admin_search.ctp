@@ -11,7 +11,7 @@
 		echo $this->Form->create('Document', array('action' => 'search'), array('method' => 'POST'));
 		echo '<div class="input-append">';
 		echo $this->Form->input('search', array('label' => false, 'div' => false, 'class' => 'search input-large', 'placeholder' => __('Search', true)));
-		echo $this->Js->submit(__('Search'), array('url' => '/admin/documents/Documents/search/' . $document_type_id . '/' . $parent_entityid, 'update' => '#documents', 'div' => false, 'escape' => false, 'class' => 'btn'));
+		echo $this->Js->submit(__('Search'), array( 'url' => '/admin/documents/Documents/search/'.$document_type_id.'/'.$parent_entityid, 'update' => '#documents',	'div' => false,	'escape'=>false,'class'=>'btn'));
 		//echo $this->Form->button('<i class="icon icon-search"></i>', array( 'type'=>'submit', 'label' => false, 'div' => false, 'class' => 'btn'));
 		echo '</div>';
 		echo $this->Form->end();

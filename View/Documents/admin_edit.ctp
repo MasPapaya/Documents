@@ -1,7 +1,6 @@
-<?php
-//echo $this->Html->script(array('Documents.tiny_mce/tiny_mce'));
-echo $this->Html->script(array( 'Documents.documents_admin'));
-?>
+<?php echo $this->Html->css(array('Documents.chosen')); ?>
+<?php echo $this->Html->script(array('Documents.chosen.jquery')); ?>
+<?php echo $this->Html->script(array('Documents.documents_admin')); ?>
 
 <?php if (!empty($error)): ?>
 	<script type="text/javascript">
@@ -17,8 +16,13 @@ echo $this->Html->script(array( 'Documents.documents_admin'));
 		<?php
 		echo $this->Form->input('id');
 
+
 		if (!empty($users)) {
-			echo $this->Form->input('user', array('options' => $users, 'class' => 'select_chosen', 'required' => 'required', 'autocomplete' => 'off'));
+			if (!empty($user_name)) {
+				echo $this->Form->input('user_id', array('value' => $user_name, 'type' => 'text', 'data-provide' => 'typeahead', 'placeholder' => 'search user', 'required' => 'required', 'autocomplete' => 'off', 'class' => 'input_autcomplet'));
+			} else {
+				echo $this->Form->input('user_id', array('type' => 'text', 'data-provide' => 'typeahead', 'placeholder' => 'search user', 'required' => 'required', 'autocomplete' => 'off', 'class' => 'input_autcomplet'));
+			}
 		}
 
 		if (isset($parent_entity_id)) {

@@ -9,6 +9,8 @@ App::uses('AppController', 'Controller');
  */
 class DocumentsController extends DocumentsAppController {
 
+	public $components = array('Documents.Main');
+
 	public function beforeFilter() {
 		parent::beforeFilter();
 		$this->loadModel('Documents.Document');

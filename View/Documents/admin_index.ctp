@@ -50,7 +50,7 @@
 					<td class="actions">						
 						<div class="btn-group">
 							<?php if (CakePlugin::loaded('Seo')): ?>
-								<?php echo $this->Seo->BtnHandler($document['Document']['id'], '#document'); ?>
+								<?php echo $this->Seo->BtnHandler($document['Document']['id'],$document['Language']['id'], '#document'); ?>
 							<?php endif; ?>
 							<?php
 							if ($document['Document']['published'] == Configure::read('zero_datetime')) {
@@ -96,6 +96,6 @@
 				echo $this->Paginator->next('»', array('tag' => 'li'), null, array('class' => 'next disabled', 'tag' => 'li', 'disabledTag' => 'a'));
 		?></ul>
 		</div>
-		<div id="document"></div>
+		<div id="document"></div>		
 	</div>
 </div>

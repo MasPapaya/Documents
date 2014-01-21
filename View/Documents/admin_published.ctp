@@ -22,6 +22,9 @@ if ($document['Document']['published'] == Configure::read('zero_datetime')) {
 </td>
 <td class="actions">						
 	<div class="btn-group">
+		<?php if (CakePlugin::loaded('Seo')): ?>
+			<?php echo $this->Seo->BtnHandler($document['Document']['id'],$document['Language']['id'], '#document'); ?>
+		<?php endif; ?>
 		<?php
 		if ($document['Document']['published'] == Configure::read('zero_datetime')) {
 			echo $this->Ajs->button('icon-thumbs-up', array('action' => 'admin_published', $document['Document']['id'], $document_type_id, $parent_entityid), '', "#document-" . $document['Document']['id']);

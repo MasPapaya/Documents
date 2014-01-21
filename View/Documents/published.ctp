@@ -22,6 +22,7 @@ if ($document['Document']['published'] == Configure::read('zero_datetime')) {
 </td>
 <td class="actions">						
 	<div class="btn-group">
+	
 		<?php
 		if ($document['Document']['published'] == Configure::read('zero_datetime')) {
 			echo $this->Ajs->button('icon-thumbs-up', array('action' => 'published', $document['Document']['id'], $document_type_id, $parent_entityid), '', "#document-" . $document['Document']['id']);
@@ -39,7 +40,7 @@ if ($document['Document']['published'] == Configure::read('zero_datetime')) {
 		?>
 		<?php
 		echo $this->Ajs->delete(
-				'<i class="icon-trash icon-white"></i>', array('action' => 'delete', $document['Document']['id'], $document_type_id, $parent_entityid), array('escape' => false, 'class' => 'btn btn-danger'), array('update' => "#" . $documentType['DocumentType']['alias'], 'confirm' => __('Are you sure you want to delete %s?', $document['Document']['title']))
+			'<i class="icon-trash icon-white"></i>', array('action' => 'delete', $document['Document']['id'], $document_type_id, $parent_entityid), array('escape' => false, 'class' => 'btn btn-danger'), array('update' => "#" . $documentType['DocumentType']['alias'], 'confirm' => __('Are you sure you want to delete %s?', $document['Document']['title']))
 		);
 		?>
 	</div>

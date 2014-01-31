@@ -33,7 +33,7 @@ class DocumentTypesController extends DocumentsAppController {
 	 */
 	public function admin_view($id = null) {
 		if (!$this->DocumentType->exists($id)) {
-			throw new NotFoundException(__('Invalid document type'), 'flash/warning');
+			throw new NotFoundException(__d('documents','Invalid document type'), 'flash/warning');
 		}
 		$options = array('conditions' => array('DocumentType.' . $this->DocumentType->primaryKey => $id));
 		$this->set('documentType', $this->DocumentType->find('first', $options));
@@ -48,10 +48,10 @@ class DocumentTypesController extends DocumentsAppController {
 		if ($this->request->is('post')) {
 			$this->DocumentType->create();
 			if ($this->DocumentType->save($this->request->data)) {
-				$this->Session->setFlash(__('The document type has been saved'), 'flash/success');
+				$this->Session->setFlash(__d('documents','The document type has been saved'), 'flash/success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The document type could not be saved. Please, try again.'), 'flash/error');
+				$this->Session->setFlash(__d('documents','The document type could not be saved. Please, try again.'), 'flash/error');
 			}
 		}
 		$entities = $this->DocumentType->Entity->find('list');
@@ -67,14 +67,14 @@ class DocumentTypesController extends DocumentsAppController {
 	 */
 	public function admin_edit($id = null) {
 		if (!$this->DocumentType->exists($id)) {
-			throw new NotFoundException(__('Invalid document type'), 'flash/warning');
+			throw new NotFoundException(__d('documents','Invalid document type'), 'flash/warning');
 		}
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->DocumentType->save($this->request->data)) {
-				$this->Session->setFlash(__('The document type has been saved'), 'flash/success');
+				$this->Session->setFlash(__d('documents','The document type has been saved'), 'flash/success');
 				$this->redirect(array('action' => 'index'));
 			} else {
-				$this->Session->setFlash(__('The document type could not be saved. Please, try again.'), 'flash/error');
+				$this->Session->setFlash(__d('documents','The document type could not be saved. Please, try again.'), 'flash/error');
 			}
 		} else {
 			$options = array('conditions' => array('DocumentType.' . $this->DocumentType->primaryKey => $id));
@@ -94,14 +94,14 @@ class DocumentTypesController extends DocumentsAppController {
 	public function admin_delete($id = null) {
 		$this->DocumentType->id = $id;
 		if (!$this->DocumentType->exists()) {
-			throw new NotFoundException(__('Invalid document type'), 'flash/warning');
+			throw new NotFoundException(__d('documents','Invalid document type'), 'flash/warning');
 		}
 		$this->request->onlyAllow('post', 'delete');
 		if ($this->DocumentType->delete()) {
-			$this->Session->setFlash(__('Document type deleted'), 'flash/success');
+			$this->Session->setFlash(__d('documents','Document type deleted'), 'flash/success');
 			$this->redirect(array('action' => 'index'));
 		}
-		$this->Session->setFlash(__('Document type was not deleted'), 'flash/error');
+		$this->Session->setFlash(__d('documents','Document type was not deleted'), 'flash/error');
 		$this->redirect(array('action' => 'index'));
 	}
 

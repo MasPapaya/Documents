@@ -4,7 +4,7 @@
 	</div>
 	<?php echo $this->Form->create('DocumentType'); ?>
 	<fieldset>
-		<legend><?php echo __('Add Document Type'); ?></legend>
+		<legend><?php echo __d('documents','Add Document Type'); ?></legend>
 		<?php
 		echo $this->Form->input('entity_id');
 		echo $this->Form->input('name');

@@ -52,7 +52,7 @@
 <script type="text/javascript">	
 	var baseurl = '<?php echo $this->Html->url('/'); ?>';
 	documents_init();	
-	var resources_tiny = "<?php echo str_replace('/', '\/', $this->Html->url(array('controller' => 'resources', 'action' => 'tiny_upload', 'admin' => true))); ?>";
+	var resources_tiny = "<?php echo str_replace('/', '\/', $this->Html->url(array('plugin'=>'resources', 'controller' => 'Media', 'action' => 'tiny_upload', 'admin' => true))); ?>";
 </script>
 
 <?php echo $this->Js->writeBuffer(); ?>

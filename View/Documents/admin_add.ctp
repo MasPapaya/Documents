@@ -9,7 +9,7 @@
 		<legend><?php echo __('Add Document'); ?></legend>
 		<?php
 		if (!empty($users)) {
-			echo $this->Form->input('user_id', array('type'=>'text', 'data-provide' => 'typeahead', 'placeholder' => 'search user','required' => 'required', 'autocomplete' => 'off','class'=>'input_autcomplet'));
+			echo $this->Form->input('user_id', array('type' => 'text', 'data-provide' => 'typeahead', 'placeholder' => 'search user', 'required' => 'required', 'autocomplete' => 'off', 'class' => 'input_autcomplet'));
 		}
 		echo $this->Form->input('document_type_id', array('type' => 'hidden', 'value' => $parent_entityid));
 		echo $this->Form->input('parent_entityid', array('type' => 'hidden', 'value' => $parent_entityid));
@@ -38,5 +38,6 @@
 	});
 	var baseurl = '<?php echo $this->Html->url('/'); ?>';
 	documents_init();	
+	var resources_tiny = "<?php echo str_replace('/', '\/', $this->Html->url(array('plugin' => 'resources', 'controller' => 'Media', 'action' => 'tiny_upload', 'admin' => true))); ?>";
 
 </script>

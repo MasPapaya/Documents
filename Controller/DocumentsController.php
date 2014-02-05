@@ -37,6 +37,16 @@ class DocumentsController extends DocumentsAppController {
 		}
 		$this->loadModel('DocumentType');
 		$this->DocumentType->recursive = 0;
+		if (!is_numeric($document_type_id)) {
+			$document_type = $this->DocumentType->find('first', array(
+				'conditions' => array('alias' => $document_type_id)
+				));
+			if (!empty($document_type)) {
+				$document_type_id = $document_type['DocumentType']['id'];
+			} else {
+				throw new MethodNotAllowedException('The alias of document type no exist');
+			}
+		}
 		$documentType = $this->DocumentType->read(NULL, $document_type_id);
 		$this->set(compact('documentType'));
 		if (!$documentType['DocumentType']['is_multiple']) {
@@ -78,11 +88,15 @@ class DocumentsController extends DocumentsAppController {
 		}
 
 		if (!$is_admin) {
-			$conditions['Document.parent_entityid'] = $parent_entityid;
+
 			if ($documentType['DocumentType']['use_user_id'] === TRUE) {
 				$conditions['Document.user_id'] = $this->authuser['id'];
 			}
 		}
+		if ($parent_entityid != 0 || !empty($parent_entityid)) {
+			$conditions['Document.parent_entityid'] = $parent_entityid;
+		}
+
 		$this->paginate = array(
 			'limit' => '10',
 			'order' => array('Document.id' => 'desc'),
@@ -192,7 +206,7 @@ class DocumentsController extends DocumentsAppController {
 						'recursive' => 0
 						));
 					if (empty($exist_user)) {
-						$this->Session->setFlash(__d('documents','User no exist'), 'flash/warning');
+						$this->Session->setFlash(__d('documents', 'User no exist'), 'flash/warning');
 						$is_save = false;
 					} else {
 						$is_idUser = false;
@@ -212,10 +226,10 @@ class DocumentsController extends DocumentsAppController {
 					$this->Document->create();
 					$this->Document->set($this->request->data);
 					if ($this->Document->save($this->request->data)) {
-						$this->Session->setFlash(__d('documents','The document has been saved'), 'flash/success');
+						$this->Session->setFlash(__d('documents', 'The document has been saved'), 'flash/success');
 						$this->redirect(array('action' => 'admin_index', $document_type_id, $parent_entityid));
 					} else {
-						$this->Session->setFlash(__d('documents','The document could not be saved. Please, try again.'), 'flash/error');
+						$this->Session->setFlash(__d('documents', 'The document could not be saved. Please, try again.'), 'flash/error');
 					}
 				}
 			}
@@ -245,7 +259,7 @@ class DocumentsController extends DocumentsAppController {
 		$this->loadModel('Accounts.User');
 		$this->Document->id = $id;
 		if (!$this->Document->exists()) {
-			throw new NotFoundException(__d('documents','Invalid document'),'flash/warning');
+			throw new NotFoundException(__d('documents', 'Invalid document'), 'flash/warning');
 		}
 
 		$document = $this->Document->read(null, $id);
@@ -301,7 +315,7 @@ class DocumentsController extends DocumentsAppController {
 					'recursive' => 0
 					));
 				if (empty($exist_user)) {
-					$this->Session->setFlash(__d('documents','User no exist'), 'flash/warning');
+					$this->Session->setFlash(__d('documents', 'User no exist'), 'flash/warning');
 					$is_save = false;
 				} else {
 					$this->request->data['Document']['user_id'] = $exist_user['User']['id'];
@@ -309,10 +323,10 @@ class DocumentsController extends DocumentsAppController {
 			}
 			if ($is_save) {
 				if ($this->Document->save($this->request->data)) {
-					$this->Session->setFlash(__d('documents','The document has been saved'), 'flash/success');
+					$this->Session->setFlash(__d('documents', 'The document has been saved'), 'flash/success');
 					$this->redirect(array('action' => 'index', $document_type_id, $parent_entityid));
 				} else {
-					$this->Session->setFlash(__d('documents','The document could not be saved. Please, try again.'), 'flash/error');
+					$this->Session->setFlash(__d('documents', 'The document could not be saved. Please, try again.'), 'flash/error');
 				}
 			}
 		} else {
@@ -348,15 +362,15 @@ class DocumentsController extends DocumentsAppController {
 		$this->Document->id = $id;
 
 		if (!$this->Document->exists()) {
-			throw new NotFoundException(__d('documents','Invalid document'), 'flash/warning');
+			throw new NotFoundException(__d('documents', 'Invalid document'), 'flash/warning');
 		}
 		$query = $this->Document->updateAll(
 			array('Document.deleted' => "'" . date('Y-m-d H:i:s') . "'"), array('Document.id' => $id)
 		);
 		if ($query == 1) {
-			$this->Session->setFlash(__d('documents','Document deleted.'), 'flash/success');
+			$this->Session->setFlash(__d('documents', 'Document deleted.'), 'flash/success');
 		} else {
-			$this->Session->setFlash(__d('documents','Invalid deleted'), 'flash/error');
+			$this->Session->setFlash(__d('documents', 'Invalid deleted'), 'flash/error');
 		}
 		$this->redirect(array('action' => 'admin_index', $entity, $parent_entityid));
 	}
@@ -365,7 +379,7 @@ class DocumentsController extends DocumentsAppController {
 		if ($this->request->is('ajax')) {
 			$this->Document->id = $id;
 			if (!$this->Document->exists()) {
-				throw new NotFoundException(__d('documents','Invalid Document'),'flash/warning');
+				throw new NotFoundException(__d('documents', 'Invalid Document'), 'flash/warning');
 			}
 			$document = $this->Document->read(null, $id);
 			if ($document['Document']['published'] == Configure::read('zero_datetime')) {
@@ -453,20 +467,20 @@ class DocumentsController extends DocumentsAppController {
 //						$this->request->data['Document']['user_id'] = 1;
 						$this->Document->create();
 						if ($this->Document->save($this->request->data)) {
-							$this->Session->setFlash(__d('documents','The document has been saved'), 'flash/success');
+							$this->Session->setFlash(__d('documents', 'The document has been saved'), 'flash/success');
 							$this->redirect(array('action' => 'index', $document_type_id, $parent_entityid));
 						} else {
-							$this->Session->setFlash(__d('documents','The document could not be saved. Please, try again.'), 'flash/error');
+							$this->Session->setFlash(__d('documents', 'The document could not be saved. Please, try again.'), 'flash/error');
 						}
 					}
 					$this->set(compact('languages'));
 				} else {
-					throw new NotFoundException(__d('documents','DocumentType not defined'));
+					throw new NotFoundException(__d('documents', 'DocumentType not defined'));
 				}
 				$this->set(compact('documentType'));
 			} else {
 
-				$this->Session->setFlash(__d('documents','Sorry, you can not create a document of this type. Please try later'), 'flash/error');
+				$this->Session->setFlash(__d('documents', 'Sorry, you can not create a document of this type. Please try later'), 'flash/error');
 			}
 		} else {
 			throw new NotFoundException(__('Expected ajax request'));
@@ -483,10 +497,10 @@ class DocumentsController extends DocumentsAppController {
 		$document = $this->Document->read(null, $id);
 		if ($this->request->is('post') || $this->request->is('put')) {
 			if ($this->Document->save($this->request->data)) {
-				$this->Session->setFlash(__d('documents','The document has been saved'), 'flash/success');
+				$this->Session->setFlash(__d('documents', 'The document has been saved'), 'flash/success');
 				$this->redirect(array('action' => 'index', $document_type_id, $parent_entityid));
 			} else {
-				$this->Session->setFlash(__d('documents','The document could not be saved. Please, try again.'), 'flash/error');
+				$this->Session->setFlash(__d('documents', 'The document could not be saved. Please, try again.'), 'flash/error');
 			}
 		} else {
 			$this->request->data = $document;
@@ -507,16 +521,16 @@ class DocumentsController extends DocumentsAppController {
 		$this->Document->id = $id;
 
 		if (!$this->Document->exists()) {
-			throw new NotFoundException(__d('documents','Invalid document'), 'flash/warning');
+			throw new NotFoundException(__d('documents', 'Invalid document'), 'flash/warning');
 		}
 		$query = $this->Document->updateAll(
 			array('Document.deleted' => "'" . date('Y-m-d H:i:s') . "'"), array('Document.id' => $id)
 		);
 		if ($query == 1) {
-			$this->Session->setFlash(__d('documents','Document deleted.'), 'flash/success');
+			$this->Session->setFlash(__d('documents', 'Document deleted.'), 'flash/success');
 			$this->redirect(array('action' => 'index', $parent_entityid, $document_type_id));
 		} else {
-			$this->Session->setFlash(__d('documents','Invalid deleted'), 'flash/error');
+			$this->Session->setFlash(__d('documents', 'Invalid deleted'), 'flash/error');
 		}
 
 

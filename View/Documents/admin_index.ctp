@@ -64,7 +64,7 @@
 							<?php echo $this->Ajs->button('glyphicon glyphicon-eye-open', array('action' => 'admin_view', $document['Document']['id'], $document_type_id, $parent_entityid), '', "#" . $documentType['DocumentType']['alias']) ?>
 
 							<?php
-							if (Configure::read('is_resources')) {
+							if (CakePlugin::loaded('Resources')) {
 								echo $this->Frame->link('glyphicon glyphicon-film', 'frame', $document['DocumentType']['Entity']['alias'], $document['Document']['id']);
 							}
 							?>

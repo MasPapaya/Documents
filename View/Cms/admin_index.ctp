@@ -29,7 +29,7 @@
 							?>&nbsp;</td>
 						<td class="actions">
 							<div class="btn-group">
-								<?php echo $this->Ajs->link('<i class="icon-list"></i>', array('controller' => 'Documents', 'action' => 'index', $documentType['DocumentType']['id'], 0), 'btn', '#documents') ?>
+								<?php echo $this->Ajs->link('<i class="glyphicon glyphicon-list"></i>', array('controller' => 'Documents', 'action' => 'index', $documentType['DocumentType']['id'], 0), 'btn btn-default', '#documents') ?>
 							</div>
 						</td>
 					</tr>
@@ -45,8 +45,8 @@
 			);			
 			?>
 		</p>
-		<div class="pagination pagination-centered">
-			<ul>
+		<div class="pagination-centered">
+			<ul class="pagination">
 				<?php echo $this->Paginator->prev('«', array('tag' => 'li',), NULL, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled')); ?>
 				<?php echo $this->Paginator->numbers(array('tag' => 'li', 'separator' => '', 'currentTag' => 'a', 'currentClass' => 'active')); ?>
 				<?php echo $this->Paginator->next('»', array('tag' => 'li',), NULL, array('tag' => 'li', 'disabledTag' => 'a', 'class' => 'disabled')); ?>
